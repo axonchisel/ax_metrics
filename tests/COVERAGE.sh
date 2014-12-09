@@ -9,7 +9,7 @@
 #  - HTML report in ./htmlcov/index.html 
 #  - basic console report printed to stdout
 #
-# Requires coverage.py (not listed in requirements.txt).  Install with:
+# Requires coverage.py.  Install with:
 #   $ pip install coverage
 #
 # ------------------------------------------------------------------------------

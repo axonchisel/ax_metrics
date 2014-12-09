@@ -179,6 +179,11 @@ This project was inspired in late 2014 by a need to effectively digest and visua
 ### History
 
 
+#### Version 0.9.1 (2014-12-08)
+
+- First public release.
+
+
 #### Version 0.0.0 (2014-11-07)
 
 - Project created.

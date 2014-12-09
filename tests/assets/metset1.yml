@@ -1,0 +1,54 @@
+---
+
+#
+# MDefL MetSet test file.
+# Used by autotmated tests.
+#
+
+# ----------------------------------------------------------------------------
+
+table_defaults:
+
+  - table:         first_sales
+    emfetch_id:    mysql
+    emfetch_opts:  {db: "mydb1"}
+    time_field:    timeCreated
+    time_type:     TIME_EPOCH_SECS
+    filters:
+      - {field: "foo", op: "EQ", value: 123}
+      - {field: "bar", op: "EQ", value: "big bar"}
+
+  - table:         invites
+    emfetch_id:    mysql
+    emfetch_opts:  {db: "mydb1"}
+    time_type:     TIME_EPOCH_SECS
+
+
+# ----------------------------------------------------------------------------
+
+metrics:
+
+  - id: num_new_sales
+    table:         first_sales
+    func:          COUNT
+
+  - id: rev_new_sales
+    table:         first_sales
+    func:          SUM
+    data_field:    money_value
+    data_type:     MONEY_FLOAT
+
+  - id: num_invites_sent
+    table:         invites
+    time_field:    timeSent
+    func:          COUNT
+
+  - id: num_active_canaries
+    emfetch_id:    mysql
+    emfetch_opts:  {db: "mydb1"}
+    table:         coalmine_stats
+    func:          LAST
+    time_field:    log_day
+    time_type:     TIME_DATE
+    data_field:    canaries
+    data_type:     NUM_INT

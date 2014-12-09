@@ -1,0 +1,28 @@
+---
+
+#
+# MQL single Query test file.
+# Used by autotmated tests on MQEngine.
+#
+
+id: rev_new_sales_wtd
+
+data:
+  metrics:
+    - metric: rev_new_sales
+      goal: 1000
+      goal_mode: FROMZERO
+
+timeframe:
+  mode:       CURRENT
+  range_unit: WEEK
+  range_val:  1
+  gran_unit:  DAY
+
+format:
+
+ghosts:
+  - PREV_PERIOD1
+  - PREV_YEAR1
+  - PREV_YEAR2
+

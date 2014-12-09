@@ -1,0 +1,111 @@
+---
+
+#
+# MQL QuerySet test file.
+# Used by autotmated tests.
+#
+
+# ----------------------------------------------------------------------------
+
+queries:
+
+  - id: new_users_mtd
+    data:
+      metrics:
+        - metric: new_users
+          goal: 100
+          goal_mode: FROMZERO
+          rag: [60, 90]
+    timeframe:
+      mode:       CURRENT
+      range_unit: MONTH
+      range_val:  1
+      gran_unit:  DAY
+    ghosts:
+      - PREV_YEAR1
+    format:
+      _default:
+        title:    "New Users"
+        subtitle: "#users MTD"
+      geckoboard_bullet:
+        orientation: vertical
+
+  - id: new_users_r7d
+    data:
+      metrics:
+        - metric: new_users
+          label: "New Users"
+          goal: 25
+          goal_mode: CONSTANT
+    timeframe:
+      mode:       CURRENT
+      range_unit: DAY
+      range_val:  7
+      gran_unit:  DAY
+    ghosts:
+      - PREV_PERIOD1
+      - PREV_PERIOD2
+    format:
+      _default:
+        title:    "New Users"
+        subtitle: "#users r7d"
+      geckoboard_numsec_trend:
+        title: "New users, last 7d"
+        reduce:   SUM
+      geckoboard_meter:
+        min: 0
+
+  - id: cancels_r7d
+    data:
+      metrics:
+        - metric: cancels
+          label: "Cancels"
+          goal: 5
+          goal_mode: CONSTANT
+          impact: NEGATIVE
+          rag: [6, 3]
+    timeframe:
+      mode:       CURRENT
+      range_unit: DAY
+      range_val:  7
+      gran_unit:  DAY
+    ghosts:
+      - PREV_PERIOD1
+      - PREV_PERIOD2
+    format:
+      _default:
+        title:    "Cancels"
+        subtitle: "#users r7d"
+      geckoboard_numsec_comp:
+        title:    "Cancels last 7d"
+        absolute: true
+      geckoboard_text:
+        red:   "DANGER: SENSOR {qmlabel} - {value} OVER LIMIT!"
+        amber: "Notice: Sensor {qmlabel} - {value} near limit ({red})"
+        green: "Sensor {qmlabel} OK"
+      geckoboard_rag:
+        red:   "Red Cancel"
+        amber: OFF
+        green: "Green Cancel"
+
+  - id: rev_new_sales_qtd
+    data:
+      metrics:
+        - metric: rev_new_sales
+          goal: 1000
+          goal_mode: FROMZERO
+    timeframe:
+      mode:       CURRENT
+      range_unit: QUARTER
+      range_val:  1
+      gran_unit:  WEEK
+    ghosts:
+      - PREV_PERIOD1
+      - PREV_YEAR1
+      - PREV_YEAR2
+    format:
+      _default:
+        title:    "New Sales"
+        subtitle: "$rev QTD"
+      geckoboard_numsec_comp:
+        prefix:   "$"

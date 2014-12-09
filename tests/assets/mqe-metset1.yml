@@ -1,0 +1,50 @@
+---
+
+#
+# MDefL MetSet test file.
+# Used by autotmated tests on MQEngine.
+#
+
+
+# ----------------------------------------------------------------------------
+
+table_defaults:
+
+  - table:         rand
+    emfetch_id:    random
+    time_field:    not_relevant
+    time_type:     TIME_DATE
+    emfetch_opts:
+      random:
+        min: 1
+        max: 5000
+
+
+# ----------------------------------------------------------------------------
+
+metrics:
+
+  - id: rev_new_sales
+    table:         rand
+    func:          SUM
+    data_type:     MONEY_FLOAT
+
+  - id: new_users
+    table:         rand
+    func:          COUNT
+    data_type:     NUM_INT
+    emfetch_opts:
+      random:
+        round: true
+        max: 200
+
+  - id: cancels
+    table:         rand
+    func:          COUNT
+    data_type:     NUM_INT
+    emfetch_opts:
+      random:
+        round: true
+        max: 10
+
+

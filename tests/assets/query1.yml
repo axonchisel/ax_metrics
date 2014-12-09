@@ -1,0 +1,43 @@
+---
+
+#
+# MQL single Query test file.
+# Used by autotmated tests.
+#
+
+id: pct_new_paid_accounts_3mo_r30d
+
+data:
+  metrics:
+    - metric: num_new_paid_accounts
+      div:    num_total_paid_accounts
+      goal:      0.20
+      goal_mode: CONSTANT
+
+timeframe:
+  mode:       CURRENT
+  range_unit: MONTH
+  range_val:  3
+  gran_unit:  DAY
+
+  smooth_unit: DAY
+  smooth_val:  30
+
+  # The following 4 timeframe specs are not actually relevant to 
+  # this metric but are used for testing purposes only:
+  reframe_dt: 2014-11-01
+  accumulate: True
+  allow_overflow_begin: False
+  allow_overflow_end: True
+
+format:
+  geckoboard:
+    type: GB.MULTILINE
+    title: "New Paid Accounts %"
+    subtitle: "(rolling 30d)"
+
+ghosts:
+  - PREV_PERIOD1
+  - PREV_YEAR1
+  - PREV_YEAR2
+

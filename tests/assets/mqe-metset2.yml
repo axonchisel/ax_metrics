@@ -1,0 +1,64 @@
+---
+
+#
+# MDefL MetSet test file.
+# Used by autotmated tests on MQEngine.
+#
+
+
+# ----------------------------------------------------------------------------
+
+table_defaults:
+
+  - table:         kpi
+    emfetch_id:    httpd
+    time_field:    kpi_date
+    time_type:     TIME_DATE
+    data_field:    kpi_value
+    emfetch_opts:
+      options:
+        timeout: 30
+        verify_ssl: False
+        isolate: False
+      request:
+        method: GET
+        url: "{extinfo.api_url}"
+        params:
+          api_key: "{extinfo.api_key}"
+          table: "{extinfo.table_prefix}{mdef.table}"
+          time_field: "{mdef.time_field}"
+          time_type: "date"
+          function: "{mdef.func}"
+          time_start: "{tmrange.inc_begin:%Y-%m-%d}"
+          time_stop: "{tmrange.exc_end:%Y-%m-%d}"
+          data_field: "{mdef.data_field}"
+          filter1_field: "{mdef.filters.safe_indexable[0].field}"
+          filter1_val: "{mdef.filters.safe_indexable[0].value}"
+          filter2_field: "{mdef.filters.safe_indexable[1].field}"
+          filter2_val: "{mdef.filters.safe_indexable[1].value}"
+      response:
+        format: JSON
+        path: body.result
+
+
+# ----------------------------------------------------------------------------
+
+metrics:
+
+  - id: rev_new_sales
+    emfetch_id:    http
+    table:         kpi
+    func:          SUM
+    data_type:     MONEY_INT100
+    filters:
+      - {field: "kpi_stat", op: "EQ", value: "rev_exp_new_24hr_paysub_sum"}
+
+  - id: new_users
+    emfetch_id:    http
+    table:         kpi
+    func:          SUM
+    data_type:     NUM_INT
+    filters:
+      - {field: "kpi_stat", op: "EQ", value: "user_new_24hr_count"}
+
+

@@ -1,0 +1,30 @@
+---
+
+#
+# MQL single Query test file.
+# Used by autotmated tests on MQEngine.
+#
+
+id: rev_new_sales_per_user_avg_wtd
+
+data:
+  metrics:
+    - metric: rev_new_sales
+      div: new_users
+      goal: 10
+      goal_mode: CONSTANT
+
+timeframe:
+  mode:       CURRENT
+  range_unit: WEEK
+  range_val:  1
+  gran_unit:  DAY
+
+format:
+  csv: {}
+
+ghosts:
+  - PREV_PERIOD1
+  - PREV_YEAR1
+  - PREV_YEAR2
+

@@ -1,0 +1,70 @@
+---
+
+#
+# MQL QuerySet test file.
+# Used by autotmated tests.
+#
+
+# ----------------------------------------------------------------------------
+
+queries:
+
+
+  - id: pct_new_paid_accounts_rolling_30d
+
+    data:
+      metrics:
+        - metric: num_new_paid_accounts
+          div: num_total_paid_accounts
+          goal: 10
+          goal_mode: CONSTANT
+
+    timeframe:
+      range_val: 3
+      range_unit: MONTH
+      gran_unit: DAY
+      mode: CURRENT
+      smooth_unit: DAY
+      smooth_val: 30
+
+    format:
+      _default:
+        title: "New Paid Accounts %"
+        subtitle: "(rolling 30d)"
+      geckoboard_bullet:
+        rag: [0, 3, 10, 20]
+        projected: [1, 5]
+        axis: ["0", "5", "10", "15", "20"]
+      geckoboard:
+        type: GB.MULTILINE
+        title: "New Paid Accounts %"
+        subtitle: "(rolling 30d)"
+
+    ghosts:
+      - PREV_PERIOD1
+      - PREV_YEAR1
+      - PREV_YEAR2
+
+
+  - id: num_new_paid_accounts_month_to_date
+
+    data:
+      metrics:
+        - metric: num_new_paid_accounts
+          goal: 100
+          goal_mode: FROMZERO
+
+    timeframe:
+      range_unit: MONTH
+      range_val: 1
+      gran_unit: DAY
+      mode: CURRENT
+      accumulate: True
+
+    format:
+      geckoboard:
+        type: GB.BULLET
+        title: "New Paid Accounts"
+        subtitle: "(current month to date)"
+
+

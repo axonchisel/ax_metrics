@@ -1,0 +1,113 @@
+---
+
+#
+# MDefL MetSet test file.
+# Used by autotmated tests for EMFetcher_http.
+#
+
+#
+# The MetSet represented here supports integration with a hypothetical
+# HTTP-based metrics query API which responds to GET requests with JSON data.
+#
+# This hypothetical API might sit atop a metrics database into which is 
+# recorded a number of statistics every 24 hours with the following 
+# SQL structure:
+#
+#   CREATE TABLE `kpi` (
+#     `kpi_date`  DATE     NOT NULL COMMENT 'YYYY-MM-DD (UTC) of this stat',
+#     `kpi_stat`  CHAR(40) NOT NULL COMMENT 'Stat id, eg "cnt_users"',
+#     `kpi_value` INT      NOT NULL COMMENT 'Value of stat on this day',
+#     UNIQUE KEY `IDX_kpi_stat_date` (`kpi_stat`,`kpi_date`),
+#     KEY `IDX_kpi_date` (`kpi_date`)
+#   );
+#
+# The hypothetical API provides a "reduce" operation based on Ax_Metrics,
+# exposing this underlying KPI data for high level reporting.
+# It responds to queries comprising serialized versions of a
+# MetricDef plus a TimeRange to yield a single numeric value for the 
+# given time range.
+# The HTTP EMFetcher will be invoked by MQEngine to hit this API once
+# for each data point (TimeRange) of a query.
+#
+# The hypothetical API request URL here is expected to be constructed like:
+#   http://(endpoint)/?
+#     &api_key=(apikey)
+#     &table=kpi
+#     &time_field=kpi_date
+#     &time_type=date
+#     &function=(function, eg "SUM")
+#     &time_start=(date, eg "2014-02-14")
+#     &time_stop=(date, eg "2014-03-14")
+#     &data_field=kpi_value
+#     &filter1_field=kpi_stat
+#     &filter1_val=(stat name, eg "user_new_24hr_count")
+#     &filter2_field=
+#     &filter2_val=
+#
+# The extinfo fed to the EMFetcher is expected to contain:
+#   { "api_url": "http://...", "api_key": "MyApiKey" }
+#
+# The API response JSON looks like:
+#   { "body": { "result": 12345 } }
+#
+# Notice how the MetSet table default below wraps up all the common settings,
+# allowing the individual metrics to be concise and streamlined.
+#
+
+
+# ----------------------------------------------------------------------------
+
+table_defaults:
+
+  - table:         kpi
+    emfetch_id:    httpd
+    time_field:    kpi_date
+    time_type:     TIME_DATE
+    data_field:    kpi_value
+    emfetch_opts:
+      options:
+        timeout: 30
+        verify_ssl: False
+        isolate: False
+      request:
+        method: GET
+        url: "{extinfo[api_url]}"
+        params:
+          api_key: "{extinfo[api_key]}"
+          table: "{extinfo[table_prefix]}{mdef.table}"
+          time_field: "{mdef.time_field}"
+          time_type: "date"
+          function: "{mdef.func}"
+          time_start: "{tmrange.inc_begin:%Y-%m-%d}"
+          time_stop: "{tmrange.exc_end:%Y-%m-%d}"
+          data_field: "{mdef.data_field}"
+          filter1_field: "{mdef.filters.safe_indexable[0].field}"
+          filter1_val: "{mdef.filters.safe_indexable[0].value}"
+          filter2_field: "{mdef.filters.safe_indexable[1].field}"
+          filter2_val: "{mdef.filters.safe_indexable[1].value}"
+      response:
+        format: JSON
+        path: body.result
+
+
+# ----------------------------------------------------------------------------
+
+metrics:
+
+  - id: rev_new_sales
+    emfetch_id:    http
+    table:         kpi
+    func:          SUM
+    data_type:     MONEY_INT100
+    filters:
+      - {field: "kpi_stat", op: "EQ", value: "rev_exp_new_24hr_paysub_sum"}
+
+  - id: new_users
+    emfetch_id:    http
+    table:         kpi
+    func:          SUM
+    data_type:     NUM_INT
+    filters:
+      - {field: "kpi_stat", op: "EQ", value: "user_new_24hr_count"}
+
+

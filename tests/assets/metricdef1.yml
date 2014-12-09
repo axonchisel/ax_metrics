@@ -1,0 +1,19 @@
+---
+
+#
+# MDefL single MetricDef test file.
+# Used by autotmated tests.
+#
+
+id: num_new_sales
+emfetch_id:    mysql
+emfetch_opts:  {db: "mydb1"}
+table:         first_sales
+func:          COUNT
+time_field:    timeCreated
+time_type:     TIME_EPOCH_SECS
+data_field:    myfield
+data_type:     NUM_INT
+filters:
+  - {field: "foo", op: "EQ", value: 123}
+  - {field: "bar", op: "EQ", value: "big bar"}

@@ -1,0 +1,14 @@
+
+dist/
+_notes/
+htmlcov/
+
+MANIFEST
+.coverage
+.DS_Store
+
+*.pyc
+*.db
+*.orig
+*.tmproj
+*.sublime-*

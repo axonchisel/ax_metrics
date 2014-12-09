@@ -1,0 +1,5 @@
+include LICENSE.txt
+include README.md
+recursive-include py *.py
+recursive-include docs *.txt *.md
+recursive-include tests *.sh *.py *.yml

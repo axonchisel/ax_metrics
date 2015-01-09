@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Ax-Metrics
-Version: 0.9.1
+Version: 0.9.2
 Summary: "BI Glue" Business Intelligence middleware library for aggregation of metrics/KPI from any source and custom reporting for humans or other APIs
 Home-page: https://github.com/axonchisel/ax_metrics
 Author: Dan Kamins
@@ -265,6 +265,14 @@ Description: Ax\_Metrics - "BI Glue" Business Intelligence middleware Python lib
         
         History
         ~~~~~~~
+        
+        Version 0.9.2 (2015-01-08)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        -  Fix `#1 <https://github.com/axonchisel/ax_metrics/issues/1>`__
+           (Stepper time shifts ghosts incorrectly when range\_val>1).
+        -  More graceful installation (remove ref to nonexistent \*.txt docs,
+           calmer notice when pandoc missing).
         
         Version 0.9.1 (2014-12-08)
         ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -179,6 +179,12 @@ This project was inspired in late 2014 by a need to effectively digest and visua
 ### History
 
 
+#### Version 0.9.2 (2015-01-08)
+
+- Fix [#1](https://github.com/axonchisel/ax_metrics/issues/1) (Stepper time shifts ghosts incorrectly when range_val>1).
+- More graceful installation (remove ref to nonexistent \*.txt docs, calmer notice when pandoc missing).
+
+
 #### Version 0.9.1 (2014-12-08)
 
 - First public release.

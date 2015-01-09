@@ -50,11 +50,12 @@ def exec_file(fname):
     """Execute contents of relative Python file in global scope."""
     exec(read_file(fname)) in globals()
 
-def md_to_rst(s):
+def md_to_rst(s, fname='?'):
     """
     Return reStructuredText equiv string contents of Markdown string.
     If conversion (via 'pandoc' cmdline) fails, returns raw Markdown.
     Requires pandoc system utility:  http://johnmacfarlane.net/pandoc/
+    Optional fname arg used only for logging/error message.
     """
     try:
         args = ['pandoc', '-r', 'markdown', '-w', 'rst']
@@ -64,8 +65,9 @@ def md_to_rst(s):
             return pout
         raise ValueError("pandoc exit %d, stderr: %s" % (p.returncode, perr))
     except Exception as e:
-        print("warning: error converting MD to RST: ", e, file=stderr)
-        print("warning: ensure 'pandoc' is properly installed!", file=stderr)
+        print("notice: error converting '%s' MD to RST "
+            "(probably harmless, likely missing 'pandoc' utility)"
+            ": " % fname, e, file=stderr)
     return s
 
 def pypi_md_clean(s):
@@ -86,7 +88,7 @@ def pypi_longdesc():
     If errors occur (such as 'pandoc' utility not installed), the raw
     Markdown file is returned, which will probably look ugly in PyPi.
     """
-    return md_to_rst(pypi_md_clean(read_file('README.md')))
+    return md_to_rst(pypi_md_clean(read_file('README.md')), 'README.md')
 
 
 # ----------------------------------------------------------------------------

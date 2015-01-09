@@ -245,9 +245,9 @@ class Stepper(AxObj):
 
         # Handle Ghost:
         if self.is_ghost('PREV_PERIOD1'):
-            dtinc_start = self._fn_add(dtinc_start, -1)
+            dtinc_start = self._fn_add(dtinc_start, -1 * tmfrspec.range_val)
         elif self.is_ghost('PREV_PERIOD2'):
-            dtinc_start = self._fn_add(dtinc_start, -2)
+            dtinc_start = self._fn_add(dtinc_start, -2 * tmfrspec.range_val)
         elif self.is_ghost('PREV_YEAR1'):
             dtinc_start = dtmath.add_years(dtinc_start, -1)
         elif self.is_ghost('PREV_YEAR2'):

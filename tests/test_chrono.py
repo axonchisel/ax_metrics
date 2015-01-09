@@ -359,6 +359,29 @@ class TestStepper(object):
         steps = list(stepper.Stepper(tmfrspec, ghost=g1).steps())
         assert steps[0].anchor == dt('2012-01-01 00:00:00 000000')
 
+    def test_ghosts_complex(self, dts):
+        tmfrspec_dict = {
+            'range_unit' : 'DAY',
+            'range_val'  : 7,
+            'gran_unit'  : 'DAY',
+            'mode'       : 'CURRENT',
+            'reframe_dt' : dt('2014-02-14 16:30:45 001234'),
+        }
+        tmfrspec = framespec.FrameSpec(**tmfrspec_dict)
+        #
+        steps = list(stepper.Stepper(tmfrspec, ghost=None).steps())
+        assert len(steps) == 7
+        assert steps[0].anchor == dt('2014-02-08 00:00:00 000000')
+        #
+        g1 = ghost.Ghost('PREV_PERIOD1')
+        steps = list(stepper.Stepper(tmfrspec, ghost=g1).steps())
+        assert steps[0].anchor == dt('2014-02-01 00:00:00 000000')
+        #
+        g1 = ghost.Ghost('PREV_PERIOD2')
+        steps = list(stepper.Stepper(tmfrspec, ghost=g1).steps())
+        assert steps[0].anchor == dt('2014-01-25 00:00:00 000000')
+        #
+
 
     #
     # Internal Helpers
